@@ -1,20 +1,23 @@
 package main
 
 import (
-	"fmt"
-	"log"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/mux"
+	"github.com/rs/zerolog"
 )
-
-func helloMuxHandler(w http.ResponseWriter, r *http.Request) {
-	_, _ = fmt.Fprintln(w, "Hello gorilla/mux")
-}
 
 func main() {
 	router := mux.NewRouter()
 
-	router.HandleFunc("/", helloMuxHandler)
-	log.Fatal(http.ListenAndServe(":4000", router))
+	logger := zerolog.New(os.Stdout).With().Timestamp().Logger()
+	zerolog.SetGlobalLevel(zerolog.DebugLevel)
+
+	logger.Info().Msg("Starting server on port 4000")
+
+	router.HandleFunc("/v1/key/{key}", putHandler).Methods(http.MethodPut)
+
+	logger.Fatal().
+		Err(http.ListenAndServe(":4000", router)).Msg("Server exited")
 }

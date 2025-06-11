@@ -1,6 +1,31 @@
 <component name="InspectionProjectProfileManager">
   <profile version="1.0">
     <option name="myName" value="Project Default" />
+    <inspection_tool class="GoUnhandledErrorResult" enabled="true" level="WARNING" enabled_by_default="true">
+      <methods>
+        <method importPath="bytes" receiver="*Buffer" name="WriteString" />
+        <method importPath="strings" receiver="*Builder" name="WriteRune" />
+        <method importPath="bytes" receiver="*Buffer" name="Write" />
+        <method importPath="bytes" receiver="*Buffer" name="WriteByte" />
+        <method importPath="strings" receiver="*Builder" name="Write" />
+        <method importPath="math/rand" receiver="*Rand" name="Read" />
+        <method importPath="strings" receiver="*Builder" name="WriteString" />
+        <method importPath="bytes" receiver="*Buffer" name="WriteRune" />
+        <method importPath="strings" receiver="*Builder" name="WriteByte" />
+        <method importPath="hash" receiver="Hash" name="Write" />
+        <method importPath="io" receiver="ReadCloser" name="Close" />
+      </methods>
+    </inspection_tool>
+    <inspection_tool class="IncorrectHttpHeaderInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="customHeaders">
+        <set>
+          <option value="''" />
+          <option value="&quot;Hello, key value store!&quot;" />
+          <option value="Hello, key value store!" />
+          <option value="  &quot;value&quot;" />
+        </set>
+      </option>
+    </inspection_tool>
     <inspection_tool class="PyPep8Inspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
       <option name="ignoredErrors">
         <list>
