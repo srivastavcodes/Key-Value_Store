@@ -9,8 +9,8 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// putHandler expects to be called with a PUT request for
-// the "v1/key/{key}" resource.
+var logger TransactionLogger
+
 func putHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	key := vars["key"]
@@ -57,4 +57,32 @@ func deleteHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	_, _ = fmt.Fprint(w, "entry deleted successfully")
+}
+
+func initializeTransactionLog() error {
+	var err error
+
+	logger, err = NewFileTransactionLogger("transaction.log")
+	if err != nil {
+		return fmt.Errorf("failed to create event logger: %w", err)
+	}
+	events, errs := logger.ReadEvents()
+
+	var ev Event
+	ok := true
+
+	for ok && err == nil {
+		select {
+		case err, ok = <-errs:
+		case ev, ok = <-events:
+			switch ev.EventType {
+			case EventDelete:
+				err = Delete(ev.Key)
+			case EventPut:
+				err = Put(ev.Key, ev.Value)
+			}
+		}
+	}
+	logger.Run()
+	return err
 }
