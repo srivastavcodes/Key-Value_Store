@@ -11,14 +11,19 @@ import (
 func main() {
 	router := mux.NewRouter()
 
-	logger := zerolog.New(os.Stdout).With().Timestamp().Logger()
+	zlog := zerolog.New(os.Stdout).With().Timestamp().Logger()
 	zerolog.SetGlobalLevel(zerolog.DebugLevel)
 
-	logger.Info().Msg("Starting server on port 4000")
+	err := initializeTransactionLog()
+	if err != nil {
+		zlog.Fatal().Err(err).Msg("could not initialize Transaction Log")
+		return
+	}
+	zlog.Info().Msg("Starting server on port 4000")
 
 	routes(router)
 
-	logger.Fatal().
+	zlog.Fatal().
 		Err(http.ListenAndServe(":4000", router)).Msg("Server exited")
 }
 

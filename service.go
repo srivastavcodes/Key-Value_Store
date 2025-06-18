@@ -27,6 +27,7 @@ func putHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	logger.WritePut(key, string(value))
 	w.WriteHeader(http.StatusCreated)
 }
 
@@ -56,6 +57,7 @@ func deleteHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	logger.WriteDelete(key)
 	_, _ = fmt.Fprint(w, "entry deleted successfully")
 }
 
