@@ -34,8 +34,6 @@ func NewPostgresTransactionLogger(config PostgresDBParams) (TransactionLogger, e
 	}
 	logger := &PostgresTransactionLogger{db: db}
 
-	// todo -> figure out the below methods using database/sql package docs
-
 	exists, err := logger.verifyTableExists()
 	if err != nil {
 		return nil, fmt.Errorf("failed to verify table exists: %w", err)
